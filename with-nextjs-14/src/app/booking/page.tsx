@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/select";
 import { InfoContext } from "@/context/InfoContext";
 import { Booker, useEventTypes } from "@calcom/atoms";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useContext, useState } from "react";
 
 type View = "MONTH_VIEW" | "WEEK_VIEW" | "COLUMN_VIEW" | undefined;
@@ -18,10 +18,14 @@ type View = "MONTH_VIEW" | "WEEK_VIEW" | "COLUMN_VIEW" | undefined;
 const viewOptions: View[] = ["MONTH_VIEW", "WEEK_VIEW", "COLUMN_VIEW"];
 
 export default function BookerPage() {
+  const searchParams = useSearchParams();
+  const rescheduleUid = searchParams.get("rescheduleUid");
+  const rescheduledBy = searchParams.get("rescheduledBy");
+  const eventTypeSlugQueryParam = searchParams.get("eventTypeSlug");
   const { userDetails, setUserDetails } = useContext(InfoContext);
   const { data, isLoading, refetch } = useEventTypes(userDetails.username);
-  const [eventSlug, setEventSlug] = useState<string | null>(null);
-  const [view, setView] = useState<View>();
+  const [eventSlug, setEventSlug] = useState<string | undefined>(eventTypeSlugQueryParam ?? undefined);
+  const [view, setView] = useState<View>(viewOptions[0]);
 
   const router = useRouter();
 
@@ -31,7 +35,7 @@ export default function BookerPage() {
       {isLoading && <div>Loading...</div>}
       {!isLoading && data && data.length > 0 &&
         <div className="max-w-3xl flex gap-5">
-          <Select onValueChange={(value) => setEventSlug(value)}>
+          <Select value={eventSlug} defaultValue={eventSlug} onValueChange={(value) => setEventSlug(value)}>
             <SelectTrigger>
               <SelectValue placeholder="Select Event Type" />
             </SelectTrigger>
@@ -43,11 +47,11 @@ export default function BookerPage() {
               ))}
             </SelectContent>
           </Select>
-          <Select onValueChange={(value) => setView(value as View)}>
+          <Select value={view} onValueChange={(value) => setView(value as View)}>
             <SelectTrigger>
               <SelectValue placeholder="Select View" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent defaultValue={view}>
               {viewOptions.map((viewOption) => (
                 viewOption !== undefined && <SelectItem value={viewOption} key={viewOption}>
                   {viewOption}
@@ -58,7 +62,7 @@ export default function BookerPage() {
         </div>
       }
       <div className="max-w-9/10">
-        {eventSlug && (
+        {eventSlug && !rescheduleUid && (
           <Booker
             eventSlug={eventSlug}
             isTeamEvent={false}
@@ -72,6 +76,20 @@ export default function BookerPage() {
               router.push(`/booking/${uid}`);
             }}
           />
+        )}
+        {rescheduleUid && eventTypeSlugQueryParam && (
+          <>
+            <Booker
+              rescheduledBy={rescheduledBy ?? ""}
+              eventSlug={eventTypeSlugQueryParam}
+              username={userDetails.username}
+              view={view}
+              onCreateBookingSuccess={({ data }) => {
+                const { uid } = data;
+                router.push(`/${uid}`);
+              }}
+            />
+          </>
         )}
       </div>
     </div>

@@ -1,4 +1,4 @@
-import Booking from "./BookingPage";
+import Booking from "../../../components/booking/BookingPage";
 
 export default async function BookingPage({ params }: { params: Promise<{ bookingUid: string }> }) {
   const { bookingUid } = await params;
