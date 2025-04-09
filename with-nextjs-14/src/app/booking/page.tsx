@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select";
 import { InfoContext } from "@/context/InfoContext";
 import { Booker, useEventTypes } from "@calcom/atoms";
+import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 
 type View = "MONTH_VIEW" | "WEEK_VIEW" | "COLUMN_VIEW" | undefined;
@@ -21,6 +22,8 @@ export default function BookerPage() {
   const { data, isLoading, refetch } = useEventTypes(userDetails.username);
   const [eventSlug, setEventSlug] = useState<string | null>(null);
   const [view, setView] = useState<View>();
+
+  const router = useRouter();
 
   return (
     <div className="flex flex-col items-center justify-center mt-8 gap-8">
@@ -62,8 +65,11 @@ export default function BookerPage() {
             username={userDetails.username}
             view={view}
             bannerUrl="https://i0.wp.com/mahala.co.uk/wp-content/uploads/2014/12/img_banner-thin_mountains.jpg?fit=800%2C258&ssl=1"
-            onCreateBookingSuccess={() => {
+            onCreateBookingSuccess={({ data }) => {
+              console.log("data: ", data);
               alert("Booking has been created");
+              const { uid } = data;
+              router.push(`/booking/${uid}`);
             }}
           />
         )}

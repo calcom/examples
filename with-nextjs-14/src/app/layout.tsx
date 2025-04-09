@@ -44,8 +44,12 @@ export default function RootLayout({
       text: "Event Type Settings"
     },
     {
-      href: "/booker",
+      href: "/booking",
       text: "Booker",
+    },
+    {
+      href: "/bookings",
+      text: "All Bookings",
     },
     {
       href: "/connect",

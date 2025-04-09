@@ -18,7 +18,6 @@ export async function POST(req: NextRequest) {
 
   const existingUser = await prisma.user.findFirst({ orderBy: { createdAt: "desc" } });
   if (existingUser && existingUser.calcomUserId) {
-    console.log("found existing user: ", existingUser);
     return NextResponse.json({
       id: existingUser.calcomUserId,
       email: existingUser.email,
@@ -53,7 +52,6 @@ export async function POST(req: NextRequest) {
     }
   );
   const body = await response.json();
-  console.log("body: ", body);
   await prisma.user.update({
     data: {
       refreshToken: (body.data?.refreshToken as string) ?? "",
@@ -64,7 +62,6 @@ export async function POST(req: NextRequest) {
     where: { id: localUser.id },
   });
   await createDefaultSchedule(body.data?.accessToken as string);
-  console.log("console.log(body): ", body);
   return NextResponse.json({
     id: body?.data?.user?.id,
     email: (body.data?.user.email as string) ?? "",
