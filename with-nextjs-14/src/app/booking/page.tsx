@@ -86,7 +86,7 @@ export default function BookerPage() {
               view={view}
               onCreateBookingSuccess={({ data }) => {
                 const { uid } = data;
-                router.push(`/${uid}`);
+                router.push(`/booking/${uid}`);
               }}
             />
           </>
