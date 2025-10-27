@@ -148,10 +148,8 @@ export async function expertEdit(
   _prevState: { error: null | string } | { success: null | string },
   formData: FormData
 ) {
-  console.log("[_actions] Updating expert with form data: ", formData);
   const sesh = await auth();
   if (!sesh?.user.id) {
-    console.log("[_actions] Unauthorized user edit", formData);
     return { error: "Unauthorized" };
   }
   const formDataWithoutActionFields = Object.fromEntries(
@@ -165,7 +163,6 @@ export async function expertEdit(
     .safeParse(formDataWithoutActionFields);
 
   if (!userEdit.success) {
-    console.log("[_actions] Inavlid form data", formData);
     return { error: "Invalid form data" };
   }
 

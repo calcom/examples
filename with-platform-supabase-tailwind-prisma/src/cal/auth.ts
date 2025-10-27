@@ -16,9 +16,6 @@ export async function signUp({ email, name, user }: CreateManagedUserInput & { u
   });
 
   if (userCreation.status === "error") {
-    console.log(
-      `[Cal auth] Unable to create user '${email}' on Cal Platform. Check the logs above for more details`
-    );
     throw new Error(`Unable to create user '${email}' on Cal Platform`);
   }
 

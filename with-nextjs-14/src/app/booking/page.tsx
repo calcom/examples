@@ -70,7 +70,6 @@ export default function BookerPage() {
             view={view}
             bannerUrl="https://i0.wp.com/mahala.co.uk/wp-content/uploads/2014/12/img_banner-thin_mountains.jpg?fit=800%2C258&ssl=1"
             onCreateBookingSuccess={({ data }) => {
-              console.log("data: ", data);
               alert("Booking has been created");
               const { uid } = data;
               router.push(`/booking/${uid}`);

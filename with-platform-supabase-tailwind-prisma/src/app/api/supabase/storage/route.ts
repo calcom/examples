@@ -18,7 +18,6 @@ export async function GET(request: Request) {
     const { data, error } = await supabaseAdmin.storage
       .from("avatars")
       .createSignedUploadUrl(id, { upsert: true });
-    console.log(error);
     if (error) throw error;
 
     return new Response(JSON.stringify(data), {
