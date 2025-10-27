@@ -34,9 +34,17 @@ export default async function DashboardSettingsBookingEvents() {
   }
   const getEventTypes = await cal({ user: { id: sesh?.user.id } }).get("/v2/event-types");
   if (getEventTypes.status === "error") {
-    console.error("[dashboard/settings/booking-events/page.tsx] Error fetching event types", getEventTypes);
-    // TODO debug this error
-    console.warn(`[dashboard/settings/booking-events/page.tsx] Error fetching event types. Check logs above`);
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
+        <h2 className="text-2xl font-semibold text-destructive mb-2">Failed to Load Event Types</h2>
+        <p className="text-muted-foreground mb-4">
+          We encountered an error while fetching your event types. Please try refreshing the page or contact support if the problem persists.
+        </p>
+        <Button onClick={() => window.location.reload()} variant="outline">
+          Refresh Page
+        </Button>
+      </div>
+    );
   }
   const eventTypes = getEventTypes?.data?.eventTypeGroups?.flatMap((group) => group.eventTypes) ?? [
     {

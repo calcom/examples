@@ -21,16 +21,12 @@ export const SettingsContent = () => {
           subtitlesClassName: "!text-sm !leading-relaxed !max-w-lg !text-balance !text-muted-foreground",
         }}
         onUpdateSuccess={() => {
-          console.log("[@calcom/atoms]: Updated successfully");
         }}
         onUpdateError={() => {
-          console.log("[@calcom/atoms]: Update error");
         }}
         onDeleteError={() => {
-          console.log("[@calcom/atoms]: Deletion error");
         }}
         onDeleteSuccess={() => {
-          console.log("[@calcom/atoms]: Deleted successfully");
         }}
       />
     </div>

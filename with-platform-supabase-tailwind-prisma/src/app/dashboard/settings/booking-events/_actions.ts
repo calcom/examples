@@ -12,7 +12,6 @@ export async function createEventType(
 ) {
   const sesh = await auth();
   if (!sesh?.user.id) {
-    console.log("[_actions] Unauthorized user edit", formData);
     return { error: "Unauthorized" };
   }
 
@@ -33,7 +32,6 @@ export async function createEventType(
   const input = post_EventTypesController_createEventType.parameters.safeParse(updateEventTypeParameters);
 
   if (!input.success) {
-    console.log("[_actions] Invalid form data", formData);
     return { error: "Invalid form data" };
   }
 
